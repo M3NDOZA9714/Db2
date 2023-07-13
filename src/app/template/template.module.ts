@@ -7,7 +7,6 @@ import { AsideComponent } from './aside/aside.component';
 import { AppRoutingModule } from '../app-routing.module';
 
 
-
 @NgModule({
   declarations: [
     HeadComponent,
