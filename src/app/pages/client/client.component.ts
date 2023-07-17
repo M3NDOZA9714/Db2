@@ -17,6 +17,14 @@ export class ClientComponent implements OnInit {
     Nombre: "", Direccion: "", RTN: "", Telefono: ""
   }
 
+  id: number = 0;
+  nombre: string = "";
+  direccion: string = "";
+  telefono: string = "";
+  rtn: string = "";
+
+  selectedClient: Set<client> = new Set();
+
   totalItems: number = 0;
   pageNumber: number = 1;
   pageSize: number = 8;
@@ -24,8 +32,12 @@ export class ClientComponent implements OnInit {
   constructor(private sClient: ClientService, private toastr: ToastrService, private sGlobal: GlobalService) { }
 
   ngOnInit(): void {
+    this.getCliente();
+  }
+
+  getCliente = () => {
     this.sClient.getCliente().subscribe(rs => {
-      this.client = [{ Id: 0, Nombre: "dadsaf", Direccion: "asdfe", RTN: "fdg", Telefono: "45" }];
+      this.client = rs;
     })
   }
 
@@ -33,10 +45,69 @@ export class ClientComponent implements OnInit {
     this.pageNumber = 1;
   }
 
-  filterTable = (filters: clientFilter): client[] => {
-    const result: { newArr: any[], lengthArr: number } = this.sGlobal.filterTable(this.client, filters);
+  filterTable = (): client[] => {
+    const result: { newArr: any[], lengthArr: number } = this.sGlobal.filterTable(this.client, this.filters);
     this.totalItems = result.lengthArr;
     return result.newArr;
+  }
+
+  valLine = (set: Set<any>, row: any) => {
+    return set.has(row);
+  }
+
+  addLine = (set: Set<any>, row: any) => {
+    if (set.has(row)) {
+      set.delete(row);
+    } else {
+      set.add(row);
+    }
+  }
+
+  selectAll = () => {
+    const arr = this.filterTable();
+    if (this.selectedClient.size == arr.length) {
+      this.selectedClient.clear();
+    } else {
+      this.selectedClient.clear();
+      arr.forEach(element => {
+        this.selectedClient.add(element);
+      });
+    }
+  }
+
+  insertCliente = () => {
+    this.sClient.insertCliente(this.nombre, this.direccion, this.telefono, this.rtn).subscribe(rs => {
+      if (rs[0].statusCode == 200) {
+        this.toastr.success(rs[0].message);
+        this.getCliente();
+      } else {
+        this.toastr.warning(rs[0].message);
+      }
+    })
+  }
+
+  updateCliente = () => {
+    this.sClient.updateCliente(this.id, this.nombre, this.direccion, this.telefono, this.rtn).subscribe(rs => {
+      if (rs[0].statusCode == 200) {
+        this.toastr.success(rs[0].message);
+        this.getCliente();
+      } else {
+        this.toastr.warning(rs[0].message);
+      }
+    })
+  }
+
+  loadCliente = () => {
+    const { Id, Nombre, Direccion, Telefono, RTN } = Array.from(this.selectedClient.values())[0];
+    this.setParams(Id, Nombre, Direccion, Telefono, RTN);
+  }
+
+  setParams = (id: number, nombre: string, direccion: string, telefono: string, rtn: string) => {
+    this.id = id;
+    this.nombre = nombre;
+    this.direccion = direccion;
+    this.telefono = telefono;
+    this.rtn = rtn;
   }
 
 }

@@ -18,16 +18,18 @@
         <div class="card">
             <div class="card-header">
                 <div class="btn-group">
-                    <button (click)="filterTable(filters)" type="button" class="btn btn-default">
+                    <button (click)="setParams(0, '', '', '', '')" data-bs-toggle="modal" data-bs-target="#linesModal" type="button"
+                        class="btn btn-default">
                         <i class="fas fa-plus"></i>
                     </button>
                     <button type="button" class="btn btn-default">
                         <i class="fas fa-times"></i>
                     </button>
-                    <button type="button" class="btn btn-default">
+                    <button [disabled]="selectedClient.size != 1" (click)="loadCliente()" data-bs-toggle="modal"
+                        data-bs-target="#linesModal" type="button" class="btn btn-default">
                         <i class="fas fa-edit"></i>
                     </button>
-                    <button type="button" class="btn btn-default">
+                    <button (click)="selectAll()" type="button" class="btn btn-default">
                         <i class="fas fa-check-double"></i>
                     </button>
                 </div>
@@ -40,7 +42,7 @@
                                 <th>Nombre</th>
                                 <th>Dirección</th>
                                 <th>Teléfono</th>
-                                <th>RTN {{filters.Direccion}}</th>
+                                <th>RTN</th>
                             </tr>
                             <tr>
                                 <th>
@@ -60,10 +62,11 @@
                                 </th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody style="cursor: pointer;">
                             <ng-container *ngIf="client">
-                                <tr
-                                    *ngFor="let row of filterTable(filters) | paginate: { itemsPerPage: pageSize, currentPage: pageNumber}; ; let i = index">
+                                <tr *ngFor="let row of filterTable() | paginate: { itemsPerPage: pageSize, currentPage: pageNumber}"
+                                    [ngClass]="{'table-primary': valLine(selectedClient, row)}"
+                                    (click)="addLine(selectedClient, row)">
                                     <td>{{row.Nombre}}</td>
                                     <td>{{row.Direccion}}</td>
                                     <td>{{row.Telefono}}</td>
@@ -90,19 +93,69 @@
     <div class="modal-dialog modal-fullscreen">
         <div class="modal-content">
             <div class="modal-header">
-
+                Edición/Creación de Cliente
             </div>
-            <div class="modal-body p-0">
-                <div class="card">
-                    <div class="card-body pl-0">
-
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="">Nombre</label>
+                            <input [(ngModel)]="nombre" type="text" class="form-control form-control-sm">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="">Dirección</label>
+                            <input [(ngModel)]="direccion" type="text" class="form-control form-control-sm">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="">Teléfono</label>
+                            <input [(ngModel)]="telefono" type="text" class="form-control form-control-sm">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="">RTN</label>
+                            <input [(ngModel)]="rtn" type="text" class="form-control form-control-sm">
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-secondary">Guardar</button>
-                <button type="button" class="btn btn-secondary">Imprimir</button>
+                <button (click)="id != 0 ? updateCliente() : insertCliente()" type="button"
+                    class="btn btn-secondary">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="detailLinesModal" tabindex="-1" aria-labelledby="exampleModalLgLabel" aria-hidden="true"
+    style="display: none">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-4" id="exampleModalLgLabel">
+                    Licencias Disponibles
+                </h1>
+                <button type="button" class="btn-close" style="background-color: transparent; border: 0"
+                    data-bs-target="#linesModal" data-bs-toggle="modal" aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body p-0">
+                <div class="card border-0">
+                    <div class="card-header">
+
+                    </div>
+                    <div class="card-body">
+
+                    </div>
+                </div>
             </div>
         </div>
     </div>

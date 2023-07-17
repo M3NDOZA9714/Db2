@@ -5,7 +5,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { TemplateModule } from './template/template.module';
 import { HttpClientModule } from '@angular/common/http';
-import { ToastrModule } from 'ngx-toastr';
 import { AuthModule } from './auth/auth.module';
 import { PagesModule } from './pages/pages.module';
 
@@ -19,8 +18,7 @@ import { PagesModule } from './pages/pages.module';
     TemplateModule,
     PagesModule,
     AuthModule,
-    HttpClientModule,
-    ToastrModule.forRoot()
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

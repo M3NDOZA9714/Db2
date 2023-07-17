@@ -11,12 +11,6 @@ export class GlobalService {
     if (!arr) {
       return [];
     }
-
-    if (Object.values(filters).some((val: any) => { return val.length })) {
-      return arr;
-    }
-
-    console.log("hola")
     const newArr = arr.filter(item => {
       return Object.keys(filters).every(key => {
         return item[key].toLowerCase().includes(filters[key].toLowerCase());
