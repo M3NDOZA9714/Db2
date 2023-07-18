@@ -9,12 +9,14 @@ import { FilterTablePipe } from '../util/pipe/filter-table.pipe';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ServiceComponent } from './service/service.component';
 
 @NgModule({
   declarations: [
     HomeComponent,
     ClientComponent,
-    FilterTablePipe
+    FilterTablePipe,
+    ServiceComponent
   ],
   imports: [
     CommonModule,

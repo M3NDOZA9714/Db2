@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { environment } from 'src/environments/environment';
-import { client } from '../interface/cliente.interface';
+import { client } from '../interface/client.interface';
 import { response } from '../interface/global.interface';
 
 @Injectable({

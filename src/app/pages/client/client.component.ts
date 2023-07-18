@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
-import { client, clientFilter } from 'src/app/util/interface/cliente.interface';
+import { client, clientFilter } from 'src/app/util/interface/client.interface';
 import { ClientService } from 'src/app/util/service/client.service';
 import { GlobalService } from 'src/app/util/service/global.service';
 
@@ -91,6 +91,7 @@ export class ClientComponent implements OnInit {
       if (rs[0].statusCode == 200) {
         this.toastr.success(rs[0].message);
         this.getCliente();
+        this.selectedClient.clear();
       } else {
         this.toastr.warning(rs[0].message);
       }
