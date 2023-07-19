@@ -1,0 +1,207 @@
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h3 class="mt-3 ml-2">Catálogo de Paquetes</h3>
+            </div>
+            <!-- /.col -->
+            <div class="col-sm-6">
+            </div>
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</div>
+
+<div class="content">
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-header">
+                <div class="btn-group">
+                    <button (click)="setParams(0, '', '', [])" data-bs-toggle="modal" data-bs-target="#linesModal"
+                        type="button" class="btn btn-default">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                    <button type="button" class="btn btn-default">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    <button [disabled]="selectedPackage.size != 1" (click)="loadPaquete()"
+                        [attr.data-bs-toggle]="selectedPackage.size == 1 ? 'modal' : null"
+                        [attr.data-bs-target]="selectedPackage.size == 1 ? '#linesModal' : null" type="button"
+                        class="btn btn-default">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button [disabled]="paquete.length == 0"
+                        (click)="selectAll(paquete, packageFilters, selectedPackage)" type="button"
+                        class="btn btn-default">
+                        <i class="fas fa-check-double"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover table-sm">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Descripción</th>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <input [(ngModel)]="packageFilters.Nombre" class="form-control form-control-sm"
+                                        type="text">
+                                </th>
+                                <th>
+                                    <input [(ngModel)]="packageFilters.Descripcion" class="form-control form-control-sm"
+                                        type="text">
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody style="cursor: pointer;">
+                            <ng-container *ngIf="paquete">
+                                <tr *ngFor="let row of filterTable(paquete, packageFilters) | paginate: { itemsPerPage: pageSize, currentPage: pageNumber}"
+                                    [ngClass]="{'table-primary': valLine(selectedPackage, row)}"
+                                    (click)="addLine(selectedPackage, row)">
+                                    <td>{{row.Nombre}}</td>
+                                    <td>{{row.Descripcion}}</td>
+                                </tr>
+                            </ng-container>
+                            <ng-container *ngIf="!paquete.length">
+                                <tr>
+                                    <td class="text-center" colspan="4">Sin registros</td>
+                                </tr>
+                            </ng-container>
+                        </tbody>
+                    </table>
+                    <pagination-controls (pageChange)="pageNumber= $event" (pageBoundsCorrection)="pageChanged($event)"
+                        [responsive]="true"></pagination-controls>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" #firstModal id="linesModal" tabindex="-1" aria-labelledby="exampleModalXlLabel"
+    aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                Edición/Creación de Paquete
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="">Nombre</label>
+                            <input [(ngModel)]="nombre" type="text" class="form-control form-control-sm">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="">Descripción</label>
+                            <input [(ngModel)]="descripcion" type="text" class="form-control form-control-sm">
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="btn-group">
+                            <button (click)="getServicios()" data-bs-toggle="modal" data-bs-target="#detailLinesModal"
+                                class="btn btn-default">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                            <button [disabled]="!selectedService.size" (click)="removeLine()" type="button"
+                                class="btn btn-default">
+                                <i class="fas fa-times"></i>
+                            </button>
+                            <button [disabled]="!servicio.length"
+                                (click)="selectAll(servicio, serviceFilters, selectedService)" type="button"
+                                class="btn btn-default">
+                                <i class="fas fa-check-double"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre</th>
+                                        <th>Descripción</th>
+                                    </tr>
+                                </thead>
+                                <tbody style="cursor: pointer;">
+                                    <ng-container *ngIf="servicio.length">
+                                        <tr *ngFor="let row of servicio"
+                                            [ngClass]="{'table-primary': valLine(selectedService, row)}"
+                                            (click)="addLine(selectedService, row)">
+                                            <td>{{row.NombreServicio}}</td>
+                                            <td>{{row.DescripcionServicio}}</td>
+                                        </tr>
+                                    </ng-container>
+                                    <ng-container *ngIf="!servicio.length">
+                                        <tr class="text-center">
+                                            <td colspan="2">Sin registros</td>
+                                        </tr>
+                                    </ng-container>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button (click)="id != 0 ? updatePaquete() : insertPaquete()" type="button" class="btn btn-secondary">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" #secondModal id="detailLinesModal" tabindex="-1" aria-labelledby="exampleModalLgLabel"
+    aria-hidden="true" style="display: none">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-4" id="exampleModalLgLabel">
+                    Selección de Servicios
+                </h1>
+            </div>
+            <div class="modal-body p-0">
+                <div class="card border-0">
+                    <div class="card-header">
+                        <button (click)="addServiceToPackage()" class="btn btn-default">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                        <button [disabled]="servicios.length== 0"
+                            (click)="selectAll(servicios, servicesFilters, selectedServices)" type="button"
+                            class="btn btn-default">
+                            <i class="fas fa-check-double"></i>
+                        </button>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-sm">
+                                <thead>
+                                    <th>Servicio</th>
+                                    <th>Descripción</th>
+                                </thead>
+                                <tbody style="cursor: pointer;">
+                                    <tr *ngFor="let row of servicios"
+                                        [ngClass]="{'table-primary': valLine(selectedServices, row)}"
+                                        (click)="addLine(selectedServices, row)">
+                                        <td>{{row.Nombre}}</td>
+                                        <td>{{row.Descripcion}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>

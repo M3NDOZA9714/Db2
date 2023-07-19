@@ -10,13 +10,15 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ServiceComponent } from './service/service.component';
+import { PackageComponent } from './package/package.component';
 
 @NgModule({
   declarations: [
     HomeComponent,
     ClientComponent,
     FilterTablePipe,
-    ServiceComponent
+    ServiceComponent,
+    PackageComponent
   ],
   imports: [
     CommonModule,

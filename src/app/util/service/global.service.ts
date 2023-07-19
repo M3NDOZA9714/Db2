@@ -21,4 +21,27 @@ export class GlobalService {
 
     return { newArr, lengthArr };
   }
+
+  addLine = (set: Set<any>, row: any) => {
+    if (set.has(row)) {
+      set.delete(row);
+    } else {
+      set.add(row);
+    }
+  }
+
+  valLine = (set: Set<any>, row: any) => {
+    return set.has(row);
+  }
+
+  selectAll = (arr: any, set: Set<any>) => {
+    if (set.size == arr.length) {
+      set.clear();
+    } else {
+      set.clear();
+      arr.forEach((element: any) => {
+        set.add(element);
+      });
+    }
+  }
 }

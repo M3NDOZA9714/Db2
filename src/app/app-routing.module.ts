@@ -4,6 +4,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { MainComponent } from './template/main/main.component';
 import { ClientComponent } from './pages/client/client.component';
 import { ServiceComponent } from './pages/service/service.component';
+import { PackageComponent } from './pages/package/package.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'main', pathMatch: 'full' },
@@ -12,7 +13,8 @@ const routes: Routes = [
       { path: '', redirectTo: 'home', pathMatch: 'full' },
       { path: 'home', component: HomeComponent },
       { path: 'client', component: ClientComponent },
-      { path: 'service', component: ServiceComponent }
+      { path: 'service', component: ServiceComponent },
+      { path: 'package', component: PackageComponent }
     ]
   },
   { path: '**', redirectTo: 'main' }
