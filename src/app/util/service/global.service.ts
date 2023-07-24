@@ -13,7 +13,7 @@ export class GlobalService {
     }
     const newArr = arr.filter(item => {
       return Object.keys(filters).every(key => {
-        return item[key].toLowerCase().includes(filters[key].toLowerCase());
+        return item[key].toString().toLowerCase().includes(filters[key].toString().toLowerCase());
       });
     });
 

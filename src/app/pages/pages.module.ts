@@ -11,6 +11,11 @@ import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ServiceComponent } from './service/service.component';
 import { PackageComponent } from './package/package.component';
+import { SuscriptionComponent } from './suscription/suscription.component';
+import { TechnicianComponent } from './technician/technician.component';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { BankComponent } from './bank/bank.component';
+import { InvoiceComponent } from './invoice/invoice.component';
 
 @NgModule({
   declarations: [
@@ -18,13 +23,18 @@ import { PackageComponent } from './package/package.component';
     ClientComponent,
     FilterTablePipe,
     ServiceComponent,
-    PackageComponent
+    PackageComponent,
+    SuscriptionComponent,
+    TechnicianComponent,
+    BankComponent,
+    InvoiceComponent
   ],
   imports: [
     CommonModule,
     BrowserAnimationsModule,
     FormsModule,
     NgxPaginationModule,
+    NgSelectModule,
     ToastrModule.forRoot()
   ]
 })

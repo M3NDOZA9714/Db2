@@ -18,15 +18,17 @@
         <div class="card">
             <div class="card-header">
                 <div class="btn-group">
-                    <button (click)="setParams(0, '', '', '', '')" data-bs-toggle="modal" data-bs-target="#linesModal" type="button"
-                        class="btn btn-default">
+                    <button (click)="setParams(0, '', '', '', '')" data-bs-toggle="modal" data-bs-target="#linesModal"
+                        type="button" class="btn btn-default">
                         <i class="fas fa-plus"></i>
                     </button>
                     <button type="button" class="btn btn-default">
                         <i class="fas fa-times"></i>
                     </button>
-                    <button [disabled]="selectedClient.size != 1" (click)="loadCliente()" data-bs-toggle="modal"
-                        data-bs-target="#linesModal" type="button" class="btn btn-default">
+                    <button [disabled]="selectedClient.size != 1" (click)="loadCliente()"
+                        [attr.data-bs-toggle]="selectedClient.size == 1 ? 'modal' : null"
+                        [attr.data-bs-target]="selectedClient.size == 1 ? '#linesModal' : null" type="button"
+                        class="btn btn-default">
                         <i class="fas fa-edit"></i>
                     </button>
                     <button (click)="selectAll()" type="button" class="btn btn-default">

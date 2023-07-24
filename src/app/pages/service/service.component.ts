@@ -75,7 +75,6 @@ export class ServiceComponent implements OnInit {
 
   insertServicio = () => {
     this.sService.insertServicio(this.nombre, this.descripcion).subscribe(rs => {
-      console.log(rs)
       if (rs[0].statusCode == 200) {
         this.toastr.success(rs[0].message);
         this.getServicio();

@@ -1,0 +1,158 @@
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h3 class="mt-3 ml-2">Suscripcioness</h3>
+            </div>
+            <!-- /.col -->
+            <div class="col-sm-6">
+            </div>
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</div>
+
+<div class="content">
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-header">
+                <div class="btn-group">
+                    <button (click)="setParams(null, null, '', null, '', null, '', 0, 0)" data-bs-toggle="modal"
+                        data-bs-target="#linesModal" type="button" class="btn btn-default">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                    <button type="button" class="btn btn-default">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    <button [disabled]="selectedSuscription.size != 1" (click)="loadSuscription()"
+                        [attr.data-bs-toggle]="selectedSuscription.size == 1 ? 'modal' : null"
+                        [attr.data-bs-target]="selectedSuscription.size == 1 ? '#linesModal' : null" type="button"
+                        class="btn btn-default">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button [disabled]="!suscription.length" (click)="selectAll()" type="button"
+                        class="btn btn-default">
+                        <i class="fas fa-check-double"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover table-sm">
+                        <thead>
+                            <tr>
+                                <th>Cliente</th>
+                                <th>Paquete</th>
+                                <th>Tecnico</th>
+                                <th>Horas</th>
+                                <th>Precio</th>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <input [(ngModel)]="filters.NombreCliente" class="form-control form-control-sm"
+                                        type="text">
+                                </th>
+                                <th>
+                                    <input [(ngModel)]="filters.NombrePaquete" class="form-control form-control-sm"
+                                        type="text">
+                                </th>
+                                <th>
+                                    <input [(ngModel)]="filters.NombreTecnico" class="form-control form-control-sm"
+                                        type="text">
+                                </th>
+                                <th>
+                                    <input [(ngModel)]="filters.Horas" class="form-control form-control-sm" type="text">
+                                </th>
+                                <th>
+                                    <input [(ngModel)]="filters.Precio" class="form-control form-control-sm"
+                                        type="text">
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody style="cursor: pointer;">
+                            <ng-container *ngIf="suscription.length">
+                                <tr *ngFor="let row of filterTable() | paginate: {itemsPerPage: pageSize, currentPage: pageNumber}"
+                                    [ngClass]="{'table-primary': valLine(row)}" (click)="addLine(row)">
+                                    <td>{{row.NombreCliente}}</td>
+                                    <td>{{row.NombrePaquete}}</td>
+                                    <td>{{row.NombreTecnico}}</td>
+                                    <td>{{row.Horas}}</td>
+                                    <td>{{row.Precio}}</td>
+                                </tr>
+                            </ng-container>
+                        </tbody>
+                    </table>
+                    <pagination-controls (pageChange)="pageNumber= $event" (pageBoundsCorrection)="pageChanged($event)"
+                        [responsive]="true"></pagination-controls>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="linesModal" tabindex="-1" aria-labelledby="exampleModalXlLabel" aria-hidden="true"
+    style="display: none;">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                Edición/Creación de Paquete
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="">Cliente</label>
+                            <ng-select [(ngModel)]="idCliente" placeholder="Seleccione el cliente" class="custom">
+                                <ng-option *ngFor="let row of client" [value]="row.Id">
+                                    {{row.Nombre}}
+                                </ng-option>
+                            </ng-select>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="">Paquete</label>
+                            <ng-select [(ngModel)]="idPaquete" placeholder="Selecciona un Paquete" class="custom">
+                                <ng-option *ngFor="let row of package" [value]="row.Id">
+                                    {{row.Nombre}}
+                                </ng-option>
+                            </ng-select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="">Técnico</label>
+                            <ng-select [(ngModel)]="idTecnico" placeholder="Selecciona un Técnico" class="custom">
+                                <ng-option *ngFor="let row of technician" [value]="row.Id">
+                                    {{row.Nombre}}
+                                </ng-option>
+                            </ng-select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="">Cantidad de Horas</label>
+                            <input [(ngModel)]="horas" type="number" class="form-control form-control-sm">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="">Precio</label>
+                            <input [(ngModel)]="precio" type="number" class="form-control form-control-sm">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button (click)="id ? updateSuscripcion() : insertSuscripcion()" type="button"
+                    class="btn btn-secondary">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
