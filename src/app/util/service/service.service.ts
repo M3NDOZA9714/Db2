@@ -15,11 +15,11 @@ export class ServiceService {
     return this.http.get<service[]>(`${environment.baseUrlApi}service/getServicio`);
   }
 
-  insertServicio = (nombre: string, descripcion: string) => {
-    return this.http.post<response[]>(`${environment.baseUrlApi}service/insertServicio`, { nombre, descripcion });
+  insertServicio = (nombre: string, descripcion: string, precio: number | null) => {
+    return this.http.post<response[]>(`${environment.baseUrlApi}service/insertServicio`, { nombre, descripcion, precio });
   }
 
-  updateServicio = (id: number, nombre: string, descripcion: string) => {
-    return this.http.post<response[]>(`${environment.baseUrlApi}service/updateServicio`, { id, nombre, descripcion });
+  updateServicio = (id: number, nombre: string, descripcion: string, precio: number | null) => {
+    return this.http.post<response[]>(`${environment.baseUrlApi}service/updateServicio`, { id, nombre, descripcion, precio });
   }
 }

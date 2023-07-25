@@ -25,7 +25,7 @@ export class SuscriptionComponent implements OnInit {
   selectedSuscription: Set<suscription> = new Set();
 
   filters: suscriptionFilter = {
-    NombreCliente: "", NombrePaquete: "", NombreTecnico: "", Horas: "", Precio: ""
+    NombreCliente: "", NombrePaquete: "", NombreTecnico: "", Horas: ""
   }
 
   id!: number | null;
@@ -36,7 +36,6 @@ export class SuscriptionComponent implements OnInit {
   idTecnico!: number | null;
   nombreTecnico: string = "";
   horas!: number;
-  precio!: number;
 
   totalItems: number = 0;
   pageNumber: number = 1;
@@ -60,7 +59,6 @@ export class SuscriptionComponent implements OnInit {
 
   getSuscription = () => {
     this.sSuscription.getSuscripcion().subscribe(rs => {
-      console.log(rs)
       this.suscription = rs;
     })
   }
@@ -84,11 +82,11 @@ export class SuscriptionComponent implements OnInit {
   }
 
   loadSuscription = () => {
-    const { Id, IdCliente, NombreCliente, IdPaquete, NombrePaquete, IdTecnico, NombreTecnico, Horas, Precio } = Array.from(this.selectedSuscription.values())[0];
-    this.setParams(Id, IdCliente, NombreCliente, IdPaquete, NombrePaquete, IdTecnico, NombreTecnico, Horas, Precio)
+    const { Id, IdCliente, NombreCliente, IdPaquete, NombrePaquete, IdTecnico, NombreTecnico, Horas } = Array.from(this.selectedSuscription.values())[0];
+    this.setParams(Id, IdCliente, NombreCliente, IdPaquete, NombrePaquete, IdTecnico, NombreTecnico, Horas)
   }
 
-  setParams = (id: number | null, idCliente: number | null, nombreCliente: string, idPaquete: number | null, nombrePaquete: string, idTecnico: number | null, nombreTecnico: string, horas: number, precio: number) => {
+  setParams = (id: number | null, idCliente: number | null, nombreCliente: string, idPaquete: number | null, nombrePaquete: string, idTecnico: number | null, nombreTecnico: string, horas: number) => {
     this.id = id;
     this.idCliente = idCliente;
     this.nombreCliente = nombreCliente
@@ -96,12 +94,11 @@ export class SuscriptionComponent implements OnInit {
     this.nombrePaquete = nombrePaquete
     this.idTecnico = idTecnico;
     this.nombreTecnico = nombreTecnico;
-    this.horas = horas
-    this.precio = precio
+    this.horas = horas;
   }
 
   insertSuscripcion = () => {
-    this.sSuscription.insertSuscripcion(this.idPaquete, this.idCliente, this.idTecnico, this.horas, this.precio).subscribe(rs => {
+    this.sSuscription.insertSuscripcion(this.idPaquete, this.idCliente, this.idTecnico, this.horas).subscribe(rs => {
       if (rs[0].statusCode == 200) {
         this.toastr.success(rs[0].message);
         this.getSuscription();
@@ -112,7 +109,7 @@ export class SuscriptionComponent implements OnInit {
   }
 
   updateSuscripcion = () => {
-    this.sSuscription.updateSuscripcion(this.id, this.idPaquete, this.idCliente, this.idTecnico, this.horas, this.precio).subscribe(rs => {
+    this.sSuscription.updateSuscripcion(this.id, this.idPaquete, this.idCliente, this.idTecnico, this.horas).subscribe(rs => {
       if (rs[0].statusCode == 200) {
         this.toastr.success(rs[0].message);
         this.selectedSuscription.clear();
@@ -132,7 +129,6 @@ export class SuscriptionComponent implements OnInit {
   }
 
   selectAll = () => {
-    console.log("hola")
     this.sGlobal.selectAll(this.suscription, this.selectedSuscription);
   }
 

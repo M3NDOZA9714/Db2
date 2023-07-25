@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
-import { paquete, paqueteFilter, servicio, servicePackageFilter } from 'src/app/util/interface/package.interface';
-import { service, serviceFilter } from 'src/app/util/interface/service.interface';
+import { paquete, paqueteFilter, servicio, servicePackageFilter, serviceFilter } from 'src/app/util/interface/package.interface';
+import { service } from 'src/app/util/interface/service.interface';
 import { GlobalService } from 'src/app/util/service/global.service';
 import { PackageService } from 'src/app/util/service/package.service';
 import { ServiceService } from 'src/app/util/service/service.service';
@@ -25,7 +25,8 @@ export class PackageComponent implements OnInit {
 
   packageFilters: paqueteFilter = {
     Nombre: "",
-    Descripcion: ""
+    Descripcion: "",
+    Precio: ""
   }
 
   serviceFilters: servicePackageFilter = {
@@ -34,16 +35,18 @@ export class PackageComponent implements OnInit {
   }
 
   servicesFilters: serviceFilter = {
-    Nombre: "",
-    Descripcion: ""
+    Nombre: "", Descripcion: ""
   }
 
   id: number = 0;
   nombre: string = "";
   descripcion: string = "";
+  precio!: number | null;
   servicio: servicio[] = [];
   servicios: service[] = [];
 
+  totalServicioItems: number = 0;
+  totalServiceItems: number = 0;
   totalItems: number = 0;
   pageNumber: number = 1;
   pageSize: number = 8;
@@ -62,23 +65,25 @@ export class PackageComponent implements OnInit {
 
   getPaquete = () => {
     this.sPackage.getPaquete().subscribe(rs => {
+      console.log(rs)
       this.paquete = rs;
     })
   }
 
-  setParams = (id: number, nombre: string, descripcion: string, servicio: servicio[]) => {
+  setParams = (id: number, nombre: string, descripcion: string, precio: number | null, servicio: servicio[]) => {
     this.id = id;
     this.nombre = nombre;
     this.descripcion = descripcion;
+    this.precio = precio;
     this.servicio = servicio;
   }
 
   loadPaquete = () => {
-    const { Id, Nombre, Descripcion } = Array.from(this.selectedPackage.values())[0];
+    const { Id, Nombre, Precio, Descripcion } = Array.from(this.selectedPackage.values())[0];
 
     this.getServicio(Id);
 
-    this.setParams(Id, Nombre, Descripcion, this.servicio);
+    this.setParams(Id, Nombre, Descripcion, Precio, this.servicio);
   }
 
   getServicios = () => {
@@ -90,13 +95,12 @@ export class PackageComponent implements OnInit {
   getServicio = (IdPaquete: number) => {
     this.sPackage.getServicioPaquete(IdPaquete).subscribe(rs => {
       this.servicio = rs;
-      console.log(this.servicio)
     })
   }
 
-  filterTable = (arr: any, filters: any): paquete[] => {
+  filterTable = (arr: any, filters: any, size: number): any[] => {
     const result: { newArr: any[], lengthArr: number } = this.sGlobal.filterTable(arr, filters);
-    this.totalItems = result.lengthArr;
+    size = result.lengthArr;
     return result.newArr;
   }
 
@@ -108,9 +112,8 @@ export class PackageComponent implements OnInit {
     this.sGlobal.addLine(set, row);
   }
 
-  selectAll = (arr: any, filters: any, set: Set<any>) => {
-    const newArr = this.filterTable(arr, filters)
-    console.log(newArr)
+  selectAll = (arr: any, filters: any, set: Set<any>, size: number) => {
+    const newArr = this.filterTable(arr, filters, size)
     this.sGlobal.selectAll(newArr, set);
   }
 
@@ -159,7 +162,7 @@ export class PackageComponent implements OnInit {
   }
 
   insertPaquete = () => {
-    this.sPackage.insertPaquete(this.nombre, this.descripcion, this.servicio).subscribe(rs => {
+    this.sPackage.insertPaquete(this.nombre, this.descripcion, this.precio, this.servicio).subscribe(rs => {
       if (rs[0].statusCode == 200) {
         this.toastr.success(rs[0].message);
         this.getPaquete();
@@ -170,7 +173,7 @@ export class PackageComponent implements OnInit {
   }
 
   updatePaquete = () => {
-    this.sPackage.updatePaquete(this.id, this.nombre, this.descripcion, this.servicio).subscribe(rs => {
+    this.sPackage.updatePaquete(this.id, this.nombre, this.descripcion, this.precio, this.servicio).subscribe(rs => {
       if (rs[0].statusCode == 200) {
         this.toastr.success(rs[0].message);
         this.getPaquete();

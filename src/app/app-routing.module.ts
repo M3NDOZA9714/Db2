@@ -8,6 +8,7 @@ import { PackageComponent } from './pages/package/package.component';
 import { SuscriptionComponent } from './pages/suscription/suscription.component';
 import { TechnicianComponent } from './pages/technician/technician.component';
 import { BankComponent } from './pages/bank/bank.component';
+import { InvoiceComponent } from './pages/invoice/invoice.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'main', pathMatch: 'full' },
@@ -20,7 +21,8 @@ const routes: Routes = [
       { path: 'package', component: PackageComponent },
       { path: 'suscription', component: SuscriptionComponent },
       { path: 'technician', component: TechnicianComponent },
-      { path: 'bank', component: BankComponent }
+      { path: 'bank', component: BankComponent },
+      { path: 'invoice', component: InvoiceComponent }
     ]
   },
   { path: '**', redirectTo: 'main' }

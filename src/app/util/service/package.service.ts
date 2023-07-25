@@ -20,11 +20,11 @@ export class PackageService {
     return this.http.get<servicio[]>(`${environment.baseUrlApi}package/getServicioPaquete?idPaquete=${idPaquete}`,);
   }
 
-  insertPaquete = (nombre: string, descripcion: string, servicio: servicio[]) => {
-    return this.http.post<response[]>(`${environment.baseUrlApi}package/insertPaquete`, { nombre, descripcion, servicio });
+  insertPaquete = (nombre: string, descripcion: string, precio: number | null, servicio: servicio[]) => {
+    return this.http.post<response[]>(`${environment.baseUrlApi}package/insertPaquete`, { nombre, descripcion, precio, servicio });
   }
 
-  updatePaquete = (id: number, nombre: string, descripcion: string, servicio: servicio[]) => {
-    return this.http.post<response[]>(`${environment.baseUrlApi}package/updatePaquete`, { id, nombre, descripcion, servicio });
+  updatePaquete = (id: number, nombre: string, descripcion: string, precio: number | null, servicio: servicio[]) => {
+    return this.http.post<response[]>(`${environment.baseUrlApi}package/updatePaquete`, { id, nombre, descripcion, precio, servicio });
   }
 }

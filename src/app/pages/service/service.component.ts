@@ -14,12 +14,13 @@ export class ServiceComponent implements OnInit {
   service: service[] = [];
 
   filters: serviceFilter = {
-    Nombre: "", Descripcion: ""
+    Nombre: "", Descripcion: "", Precio: ""
   }
 
   id: number = 0;
   nombre: string = "";
   descripcion: string = "";
+  precio!: number | null;
 
   selectedService: Set<service> = new Set();
 
@@ -74,7 +75,7 @@ export class ServiceComponent implements OnInit {
   }
 
   insertServicio = () => {
-    this.sService.insertServicio(this.nombre, this.descripcion).subscribe(rs => {
+    this.sService.insertServicio(this.nombre, this.descripcion, this.precio).subscribe(rs => {
       if (rs[0].statusCode == 200) {
         this.toastr.success(rs[0].message);
         this.getServicio();
@@ -85,7 +86,7 @@ export class ServiceComponent implements OnInit {
   }
 
   updateServicio = () => {
-    this.sService.updateServicio(this.id, this.nombre, this.descripcion).subscribe(rs => {
+    this.sService.updateServicio(this.id, this.nombre, this.descripcion, this.precio).subscribe(rs => {
       if (rs[0].statusCode == 200) {
         this.toastr.success(rs[0].message);
         this.getServicio();
@@ -97,14 +98,15 @@ export class ServiceComponent implements OnInit {
   }
 
   loadServicio = () => {
-    const { Id, Nombre, Descripcion } = Array.from(this.selectedService.values())[0];
-    this.setParams(Id, Nombre, Descripcion);
+    const { Id, Nombre, Descripcion, Precio } = Array.from(this.selectedService.values())[0];
+    this.setParams(Id, Nombre, Descripcion, Precio);
   }
 
-  setParams = (id: number, nombre: string, descripcion: string) => {
+  setParams = (id: number, nombre: string, descripcion: string, precio: number | null) => {
     this.id = id;
     this.nombre = nombre;
     this.descripcion = descripcion;
+    this.precio = precio
   }
 
 }

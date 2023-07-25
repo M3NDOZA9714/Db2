@@ -6,14 +6,12 @@ export interface suscription {
     NombrePaquete: string,
     IdTecnico: number,
     NombreTecnico: string
-    Horas: number,
-    Precio: number
+    Horas: number
 }
 
 export interface suscriptionFilter {
     NombreCliente: string,
     NombrePaquete: string,
-    NombreTecnico: string,
-    Horas: string,
-    Precio: string
+    NombreTecnico: string
+    Horas: string
 }

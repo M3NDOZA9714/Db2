@@ -18,7 +18,7 @@
         <div class="card">
             <div class="card-header">
                 <div class="btn-group">
-                    <button (click)="setParams(0, '', '', [])" data-bs-toggle="modal" data-bs-target="#linesModal"
+                    <button (click)="setParams(0, '', '', null, [])" data-bs-toggle="modal" data-bs-target="#linesModal"
                         type="button" class="btn btn-default">
                         <i class="fas fa-plus"></i>
                     </button>
@@ -32,7 +32,7 @@
                         <i class="fas fa-edit"></i>
                     </button>
                     <button [disabled]="paquete.length == 0"
-                        (click)="selectAll(paquete, packageFilters, selectedPackage)" type="button"
+                        (click)="selectAll(paquete, packageFilters, selectedPackage, totalItems)" type="button"
                         class="btn btn-default">
                         <i class="fas fa-check-double"></i>
                     </button>
@@ -45,6 +45,7 @@
                             <tr>
                                 <th>Nombre</th>
                                 <th>Descripción</th>
+                                <th>Precio</th>
                             </tr>
                             <tr>
                                 <th>
@@ -55,15 +56,20 @@
                                     <input [(ngModel)]="packageFilters.Descripcion" class="form-control form-control-sm"
                                         type="text">
                                 </th>
+                                <th>
+                                    <input [(ngModel)]="packageFilters.Precio" class="form-control form-control-sm"
+                                        type="text">
+                                </th>
                             </tr>
                         </thead>
                         <tbody style="cursor: pointer;">
                             <ng-container *ngIf="paquete">
-                                <tr *ngFor="let row of filterTable(paquete, packageFilters) | paginate: { itemsPerPage: pageSize, currentPage: pageNumber}"
+                                <tr *ngFor="let row of filterTable(paquete, packageFilters, totalItems) | paginate: { itemsPerPage: pageSize, currentPage: pageNumber}"
                                     [ngClass]="{'table-primary': valLine(selectedPackage, row)}"
                                     (click)="addLine(selectedPackage, row)">
                                     <td>{{row.Nombre}}</td>
                                     <td>{{row.Descripcion}}</td>
+                                    <td>{{row.Precio}}</td>
                                 </tr>
                             </ng-container>
                             <ng-container *ngIf="!paquete.length">
@@ -102,6 +108,12 @@
                             <input [(ngModel)]="descripcion" type="text" class="form-control form-control-sm">
                         </div>
                     </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="">Precio</label>
+                            <input [(ngModel)]="precio" type="text" class="form-control form-control-sm">
+                        </div>
+                    </div>
                 </div>
                 <div class="card">
                     <div class="card-header">
@@ -115,8 +127,8 @@
                                 <i class="fas fa-times"></i>
                             </button>
                             <button [disabled]="!servicio.length"
-                                (click)="selectAll(servicio, serviceFilters, selectedService)" type="button"
-                                class="btn btn-default">
+                                (click)="selectAll(servicio, serviceFilters, selectedService, totalServicioItems)"
+                                type="button" class="btn btn-default">
                                 <i class="fas fa-check-double"></i>
                             </button>
                         </div>
@@ -129,10 +141,16 @@
                                         <th>Nombre</th>
                                         <th>Descripción</th>
                                     </tr>
+                                    <tr>
+                                        <th><input [(ngModel)]="serviceFilters.NombreServicio" type="text"
+                                                class="form-control form-control-sm"></th>
+                                        <th><input [(ngModel)]="serviceFilters.DescripcionServicio" type="text"
+                                                class="form-control form-control-sm"></th>
+                                    </tr>
                                 </thead>
                                 <tbody style="cursor: pointer;">
                                     <ng-container *ngIf="servicio.length">
-                                        <tr *ngFor="let row of servicio"
+                                        <tr *ngFor="let row of filterTable(servicio, serviceFilters, totalServicioItems)"
                                             [ngClass]="{'table-primary': valLine(selectedService, row)}"
                                             (click)="addLine(selectedService, row)">
                                             <td>{{row.NombreServicio}}</td>
@@ -152,7 +170,8 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                <button (click)="id != 0 ? updatePaquete() : insertPaquete()" type="button" class="btn btn-secondary">Guardar</button>
+                <button (click)="id != 0 ? updatePaquete() : insertPaquete()" type="button"
+                    class="btn btn-secondary">Guardar</button>
             </div>
         </div>
     </div>
@@ -174,8 +193,8 @@
                             <i class="fas fa-plus"></i>
                         </button>
                         <button [disabled]="servicios.length== 0"
-                            (click)="selectAll(servicios, servicesFilters, selectedServices)" type="button"
-                            class="btn btn-default">
+                            (click)="selectAll(servicios, servicesFilters, selectedServices, totalServiceItems)"
+                            type="button" class="btn btn-default">
                             <i class="fas fa-check-double"></i>
                         </button>
                     </div>
@@ -183,11 +202,19 @@
                         <div class="table-responsive">
                             <table class="table table-hover table-sm">
                                 <thead>
-                                    <th>Servicio</th>
-                                    <th>Descripción</th>
+                                    <tr>
+                                        <th>Servicio</th>
+                                        <th>Descripción</th>
+                                    </tr>
+                                    <tr>
+                                        <th><input [(ngModel)]="servicesFilters.Nombre" type="text"
+                                                class="form-control form-control-sm"></th>
+                                        <th><input [(ngModel)]="servicesFilters.Descripcion" type="text"
+                                                class="form-control form-control-sm"></th>
+                                    </tr>
                                 </thead>
                                 <tbody style="cursor: pointer;">
-                                    <tr *ngFor="let row of servicios"
+                                    <tr *ngFor="let row of filterTable(servicios, servicesFilters, totalServiceItems)"
                                         [ngClass]="{'table-primary': valLine(selectedServices, row)}"
                                         (click)="addLine(selectedServices, row)">
                                         <td>{{row.Nombre}}</td>
