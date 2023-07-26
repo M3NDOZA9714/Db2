@@ -18,13 +18,14 @@
         <div class="card">
             <div class="card-header">
                 <div class="btn-group">
-                    <button data-bs-toggle="modal" data-bs-target="#linesModal" type="button" class="btn btn-default">
+                    <button (click)="setParams(0, null, null, [])" data-bs-toggle="modal" data-bs-target="#linesModal"
+                        type="button" class="btn btn-default">
                         <i class="fas fa-plus"></i>
                     </button>
                     <button type="button" class="btn btn-default">
                         <i class="fas fa-times"></i>
                     </button>
-                    <button [disabled]="selectedInvoice.size != 1"
+                    <button [disabled]="selectedInvoice.size != 1" (click)="loadInvoice()"
                         [attr.data-bs-toggle]="selectedInvoice.size == 1 ? 'modal' : null"
                         [attr.data-bs-target]="selectedInvoice.size == 1 ? '#linesModal' : null" type="button"
                         class="btn btn-default">
@@ -43,9 +44,11 @@
                                 <th>Fecha</th>
                                 <th>Cliente</th>
                                 <th>Estado</th>
+                                <th>Tipo</th>
                                 <th>Subtotal</th>
                                 <th>Impuesto</th>
                                 <th>Total</th>
+                                <th></th>
                             </tr>
                             <tr>
                                 <th>
@@ -61,6 +64,10 @@
                                         type="text">
                                 </th>
                                 <th>
+                                    <input [(ngModel)]="invoiceFilters.Tipo" class="form-control form-control-sm"
+                                        type="text">
+                                </th>
+                                <th>
                                     <input [(ngModel)]="invoiceFilters.Subtotal" class="form-control form-control-sm"
                                         type="text">
                                 </th>
@@ -72,19 +79,30 @@
                                     <input [(ngModel)]="invoiceFilters.Total" class="form-control form-control-sm"
                                         type="text">
                                 </th>
+                                <th>
+                                </th>
                             </tr>
                         </thead>
                         <tbody style="cursor: pointer;">
                             <ng-container *ngIf="invoice">
-                                <tr *ngFor="let row of filterTable(invoice, invoiceFilters) | paginate: { itemsPerPage: pageSize, currentPage: pageNumber}"
+                                <tr *ngFor="let row of filterTable(invoice, invoiceFilters, totalItems) | paginate: { itemsPerPage: pageSize, currentPage: pageNumber}"
                                     [ngClass]="{'table-primary': valLine(selectedInvoice, row)}"
                                     (click)="addLine(selectedInvoice, row)">
                                     <td>{{row.Fecha}}</td>
                                     <td>{{row.NombreCliente}}</td>
                                     <td>{{row.Estado}}</td>
+                                    <td>{{row.Tipo}}</td>
                                     <td>{{row.Subtotal}}</td>
                                     <td>{{row.Impuesto}}</td>
                                     <td>{{row.Total}}</td>
+                                    <td>
+                                        <button [disabled]="row.Estado == 2" (click)="loadPayFactura(row)"
+                                            [attr.data-bs-toggle]="row.Estado != 2 ? 'modal' : null"
+                                            [attr.data-bs-target]="row.Estado != 2 ? '#payBanco' : null"
+                                            class="btn btn-default btn-sm">
+                                            <i class="fas fa-piggy-bank"></i>
+                                        </button>
+                                    </td>
                                 </tr>
                             </ng-container>
                             <ng-container *ngIf="!invoice.length">
@@ -114,7 +132,7 @@
                     <div class="col">
                         <div class="form-group">
                             <label for="">Nombre</label>
-                            <ng-select class="custom" placeholder="Seleccione el cliente">
+                            <ng-select [(ngModel)]="idCliente" class="custom" placeholder="Seleccione el cliente">
                                 <ng-option *ngFor="let row of client" [value]="row.Id">
                                     {{row.Nombre}}
                                 </ng-option>
@@ -124,7 +142,7 @@
                     <div class="col">
                         <div class="form-group">
                             <label for="">Tipo</label>
-                            <ng-select class="custom" placeholder="Seleccione el cliente">
+                            <ng-select [(ngModel)]="tipo" class="custom" placeholder="Seleccione el Tipo de Factura">
                                 <ng-option value="C">
                                     Contado
                                 </ng-option>
@@ -138,14 +156,18 @@
                 <div class="card">
                     <div class="card-header">
                         <div class="btn-group">
-                            <button (click)="getServicioFactura()" data-bs-toggle="modal"
-                                data-bs-target="#detailLinesModal" class="btn btn-default">
+                            <button [disabled]="!idCliente" (click)="getServicioFactura()"
+                                [attr.data-bs-toggle]="idCliente ? 'modal' : null"
+                                [attr.data-bs-target]="idCliente ? '#detailLinesModal' : null" class="btn btn-default">
                                 <i class="fas fa-plus"></i>
                             </button>
-                            <button type="button" class="btn btn-default">
+                            <button [disabled]="!selectedInvoiceDetail.size" (click)="removeLine()" type="button"
+                                class="btn btn-default">
                                 <i class="fas fa-times"></i>
                             </button>
-                            <button type="button" class="btn btn-default">
+                            <button [disabled]="!invoiceDetail.length"
+                                (click)="selectAll(invoiceDetail, invoiceDetailDilter, selectedInvoiceDetail, totalInvoiceDetail)"
+                                type="button" class="btn btn-default">
                                 <i class="fas fa-check-double"></i>
                             </button>
                         </div>
@@ -157,10 +179,55 @@
                                     <tr>
                                         <th>Nombre</th>
                                         <th>Tipo</th>
+                                        <th style="width: 90px;">Cantidad</th>
+                                        <th style="width: 90px;">Precio</th>
+                                        <th style="width: 90px;">Impuesto</th>
                                     </tr>
                                 </thead>
                                 <tbody style="cursor: pointer;">
-
+                                    <ng-container *ngIf="invoiceDetail.length">
+                                        <tr *ngFor="let row of filterTable(invoiceDetail, servicioFacturaFilters, totalInvoiceDetail)"
+                                            [ngClass]="{'table-primary': valLine(selectedInvoiceDetail, row)}"
+                                            (click)="addLine(selectedInvoiceDetail, row)">
+                                            <td>{{row.Nombre}}</td>
+                                            <td>{{row.Tipo}}</td>
+                                            <td (click)="addEditingRow(row)">
+                                                <ng-container *ngIf="valLine(selectedEditingRow, row)">
+                                                    <input (keypress)="kPressInput($event)" [(ngModel)]="row.Cantidad"
+                                                        type="number"
+                                                        class="form-control form-control-border form-control-sm">
+                                                </ng-container>
+                                                <ng-container *ngIf="!valLine(selectedEditingRow, row)">
+                                                    {{row.Cantidad}}
+                                                </ng-container>
+                                            </td>
+                                            <td (click)="addEditingRow(row)">
+                                                <ng-container *ngIf="valLine(selectedEditingRow, row)">
+                                                    <input (keypress)="kPressInput($event)" [(ngModel)]="row.Precio"
+                                                        type="number"
+                                                        class="form-control form-control-border form-control-sm">
+                                                </ng-container>
+                                                <ng-container *ngIf="!valLine(selectedEditingRow, row)">
+                                                    {{row.Precio}}
+                                                </ng-container>
+                                            </td>
+                                            <td (click)="addEditingRow(row)">
+                                                <ng-container *ngIf="valLine(selectedEditingRow, row)">
+                                                    <input (keypress)="kPressInput($event)" [(ngModel)]="row.Impuesto"
+                                                        type="number"
+                                                        class="form-control form-control-border form-control-sm">
+                                                </ng-container>
+                                                <ng-container *ngIf="!valLine(selectedEditingRow, row)">
+                                                    {{row.Impuesto}}
+                                                </ng-container>
+                                            </td>
+                                        </tr>
+                                    </ng-container>
+                                    <ng-container *ngIf="!invoiceDetail.length">
+                                        <tr>
+                                            <td colspan="5" class="text-center">Sin registros</td>
+                                        </tr>
+                                    </ng-container>
                                 </tbody>
                             </table>
                         </div>
@@ -169,7 +236,8 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-secondary">Guardar</button>
+                <button (click)="id != 0 ? updateFactura() : insertFactura()" type="button"
+                    class="btn btn-secondary">Guardar</button>
             </div>
         </div>
     </div>
@@ -187,10 +255,11 @@
             <div class="modal-body p-0">
                 <div class="card border-0">
                     <div class="card-header">
-                        <button class="btn btn-default">
+                        <button (click)="addItemToInvoice()" class="btn btn-default">
                             <i class="fas fa-plus"></i>
                         </button>
-                        <button (click)="selectAll(servicioFactura, servicioFacturaFilters, selectedServicioFactura)"
+                        <button
+                            (click)="selectAll(servicioFactura, servicioFacturaFilters, selectedServicioFactura, totalItems)"
                             type="button" class="btn btn-default">
                             <i class="fas fa-check-double"></i>
                         </button>
@@ -214,12 +283,20 @@
                                     </tr>
                                 </thead>
                                 <tbody style="cursor: pointer;">
-                                    <tr *ngFor="let row of filterTable(servicioFactura, servicioFacturaFilters)"
-                                        [ngClass]="{'table-primary': valLine(selectedServicioFactura, row)}"
-                                        (click)="addLine(selectedServicioFactura, row)">
-                                        <td>{{row.Nombre}}</td>
-                                        <td>{{row.Tipo}}</td>
-                                    </tr>
+                                    <ng-container *ngIf="servicioFactura.length">
+                                        <tr *ngFor="let row of filterTable(servicioFactura, servicioFacturaFilters, totalItems)"
+                                            [ngClass]="{'table-primary': valLine(selectedServicioFactura, row)}"
+                                            (click)="addLine(selectedServicioFactura, row)">
+                                            <td>{{row.Nombre}}</td>
+                                            <td>{{row.Tipo}}</td>
+                                            <td>{{row.Precio}}</td>
+                                        </tr>
+                                    </ng-container>
+                                    <ng-container *ngIf="!servicioFactura.length">
+                                        <tr>
+                                            <td colspan="2">Sin registros</td>
+                                        </tr>
+                                    </ng-container>
                                 </tbody>
                             </table>
                         </div>
@@ -228,6 +305,42 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="payBanco" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Realizar pago</h5>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="">Banco</label>
+                            <ng-select [(ngModel)]="idBanco" class="custom" placeholder="Seleccione el Banco">
+                                <ng-option *ngFor="let row of banco" [value]="row.Id">
+                                    {{row.Nombre}} -- {{row.Cuenta}}
+                                </ng-option>
+                            </ng-select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="">Cantidad pagada</label>
+                            <input [(ngModel)]="monto" type="number" class="form-control form-control-sm">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+                <button [disabled]="id == 0" (click)="payFactura()" type="button" class="btn btn-default">Pagar</button>
             </div>
         </div>
     </div>

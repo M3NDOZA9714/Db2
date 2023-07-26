@@ -43,6 +43,7 @@
                             <tr>
                                 <th>Nombre</th>
                                 <th>Descripción</th>
+                                <th>Precio</th>
                             </tr>
                             <tr>
                                 <th>
@@ -51,6 +52,10 @@
                                 </th>
                                 <th>
                                     <input [(ngModel)]="filters.Descripcion" class="form-control form-control-sm"
+                                        type="text">
+                                </th>
+                                <th>
+                                    <input [(ngModel)]="filters.Precio" class="form-control form-control-sm"
                                         type="text">
                                 </th>
                             </tr>
@@ -62,6 +67,7 @@
                                     (click)="addLine(selectedService, row)">
                                     <td>{{row.Nombre}}</td>
                                     <td>{{row.Descripcion}}</td>
+                                    <td>{{row.Precio}}</td>
                                 </tr>
                             </ng-container>
                             <ng-container *ngIf="!service.length">
