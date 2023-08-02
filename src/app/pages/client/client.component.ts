@@ -25,7 +25,6 @@ export class ClientComponent implements OnInit {
 
   selectedClient: Set<client> = new Set();
 
-  totalItems: number = 0;
   pageNumber: number = 1;
   pageSize: number = 8;
 
@@ -46,9 +45,7 @@ export class ClientComponent implements OnInit {
   }
 
   filterTable = (): client[] => {
-    const result: { newArr: any[], lengthArr: number } = this.sGlobal.filterTable(this.client, this.filters);
-    this.totalItems = result.lengthArr;
-    return result.newArr;
+    return this.sGlobal.filterTable(this.client, this.filters);
   }
 
   valLine = (set: Set<any>, row: any) => {

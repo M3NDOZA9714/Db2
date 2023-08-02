@@ -23,7 +23,6 @@ export class BankComponent implements OnInit {
   nombre: string = "";
   cuenta: string = "";
 
-  totalItems: number = 0;
   pageNumber: number = 1;
   pageSize: number = 8;
 
@@ -82,13 +81,12 @@ export class BankComponent implements OnInit {
   }
 
   filterTable = (): bank[] => {
-    const result: { newArr: any[], lengthArr: number } = this.sGlobal.filterTable(this.bank, this.filters);
-    this.totalItems = this.totalItems;
-    return result.newArr
+    return this.sGlobal.filterTable(this.bank, this.filters);
   }
 
   selectAll = () => {
-    this.sGlobal.selectAll(this.bank, this.selectedBank);
+    const newArr = this.filterTable();
+    this.sGlobal.selectAll(newArr, this.selectedBank);
   }
 
   pageChanged = (e: any) => {

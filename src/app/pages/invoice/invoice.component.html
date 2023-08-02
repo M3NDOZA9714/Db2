@@ -31,7 +31,8 @@
                         class="btn btn-default">
                         <i class="fas fa-edit"></i>
                     </button>
-                    <button type="button" class="btn btn-default">
+                    <button (click)="selectAll(invoice, invoiceFilters, selectedInvoice)" type="button"
+                        class="btn btn-default">
                         <i class="fas fa-check-double"></i>
                     </button>
                 </div>
@@ -85,7 +86,7 @@
                         </thead>
                         <tbody style="cursor: pointer;">
                             <ng-container *ngIf="invoice">
-                                <tr *ngFor="let row of filterTable(invoice, invoiceFilters, totalItems) | paginate: { itemsPerPage: pageSize, currentPage: pageNumber}"
+                                <tr *ngFor="let row of filterTable(invoice, invoiceFilters) | paginate: { itemsPerPage: pageSize, currentPage: pageNumber}"
                                     [ngClass]="{'table-primary': valLine(selectedInvoice, row)}"
                                     (click)="addLine(selectedInvoice, row)">
                                     <td>{{row.Fecha}}</td>
@@ -166,7 +167,7 @@
                                 <i class="fas fa-times"></i>
                             </button>
                             <button [disabled]="!invoiceDetail.length"
-                                (click)="selectAll(invoiceDetail, invoiceDetailDilter, selectedInvoiceDetail, totalInvoiceDetail)"
+                                (click)="selectAll(invoiceDetail, invoiceDetailDilter, selectedInvoiceDetail)"
                                 type="button" class="btn btn-default">
                                 <i class="fas fa-check-double"></i>
                             </button>
@@ -186,7 +187,7 @@
                                 </thead>
                                 <tbody style="cursor: pointer;">
                                     <ng-container *ngIf="invoiceDetail.length">
-                                        <tr *ngFor="let row of filterTable(invoiceDetail, servicioFacturaFilters, totalInvoiceDetail)"
+                                        <tr *ngFor="let row of filterTable(invoiceDetail, servicioFacturaFilters)"
                                             [ngClass]="{'table-primary': valLine(selectedInvoiceDetail, row)}"
                                             (click)="addLine(selectedInvoiceDetail, row)">
                                             <td>{{row.Nombre}}</td>
@@ -259,7 +260,7 @@
                             <i class="fas fa-plus"></i>
                         </button>
                         <button
-                            (click)="selectAll(servicioFactura, servicioFacturaFilters, selectedServicioFactura, totalItems)"
+                            (click)="selectAll(servicioFactura, servicioFacturaFilters, selectedServicioFactura)"
                             type="button" class="btn btn-default">
                             <i class="fas fa-check-double"></i>
                         </button>
@@ -284,7 +285,7 @@
                                 </thead>
                                 <tbody style="cursor: pointer;">
                                     <ng-container *ngIf="servicioFactura.length">
-                                        <tr *ngFor="let row of filterTable(servicioFactura, servicioFacturaFilters, totalItems)"
+                                        <tr *ngFor="let row of filterTable(servicioFactura, servicioFacturaFilters)"
                                             [ngClass]="{'table-primary': valLine(selectedServicioFactura, row)}"
                                             (click)="addLine(selectedServicioFactura, row)">
                                             <td>{{row.Nombre}}</td>

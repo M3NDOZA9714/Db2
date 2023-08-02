@@ -48,8 +48,6 @@ export class InvoiceComponent implements OnInit {
   idCliente!: number | null;
   tipo!: string | null;
 
-  totalInvoiceDetail: number = 0;
-  totalItems: number = 0;
   pageNumber: number = 1;
   pageSize: number = 8;
 
@@ -103,11 +101,8 @@ export class InvoiceComponent implements OnInit {
     this.setParams(Id, IdCliente, Tipo, this.invoiceDetail);
   }
 
-  filterTable = (arr: any[], filters: any, size: number): any[] => {
-    const result: { newArr: any[], lengthArr: number } = this.sGlobal.filterTable(arr, filters);
-    size = result.lengthArr;
-
-    return result.newArr;
+  filterTable = (arr: any[], filters: any): any[] => {
+    return this.sGlobal.filterTable(arr, filters);
   }
 
 
@@ -132,8 +127,8 @@ export class InvoiceComponent implements OnInit {
     }
   }
 
-  selectAll = (arr: any, filters: any, set: Set<any>, size: number) => {
-    const newArr = this.filterTable(arr, filters, size)
+  selectAll = (arr: any, filters: any, set: Set<any>) => {
+    const newArr = this.filterTable(arr, filters);
     this.sGlobal.selectAll(newArr, set);
   }
 

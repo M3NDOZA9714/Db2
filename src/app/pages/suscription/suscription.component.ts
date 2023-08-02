@@ -37,7 +37,6 @@ export class SuscriptionComponent implements OnInit {
   nombreTecnico: string = "";
   horas!: number;
 
-  totalItems: number = 0;
   pageNumber: number = 1;
   pageSize: number = 8;
 
@@ -129,13 +128,12 @@ export class SuscriptionComponent implements OnInit {
   }
 
   selectAll = () => {
-    this.sGlobal.selectAll(this.suscription, this.selectedSuscription);
+    const newArr = this.filterTable()
+    this.sGlobal.selectAll(newArr, this.selectedSuscription);
   }
 
   filterTable = (): suscription[] => {
-    const result: { newArr: any[], lengthArr: number } = this.sGlobal.filterTable(this.suscription, this.filters);
-    this.totalItems = result.lengthArr;
-    return result.newArr;
+    return this.sGlobal.filterTable(this.suscription, this.filters);
   }
 
   pageChanged = (e: any) => {

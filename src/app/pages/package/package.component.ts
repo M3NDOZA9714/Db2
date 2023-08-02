@@ -45,9 +45,6 @@ export class PackageComponent implements OnInit {
   servicio: servicio[] = [];
   servicios: service[] = [];
 
-  totalServicioItems: number = 0;
-  totalServiceItems: number = 0;
-  totalItems: number = 0;
   pageNumber: number = 1;
   pageSize: number = 8;
 
@@ -98,10 +95,8 @@ export class PackageComponent implements OnInit {
     })
   }
 
-  filterTable = (arr: any, filters: any, size: number): any[] => {
-    const result: { newArr: any[], lengthArr: number } = this.sGlobal.filterTable(arr, filters);
-    size = result.lengthArr;
-    return result.newArr;
+  filterTable = (arr: any, filters: any): any[] => {
+    return this.sGlobal.filterTable(arr, filters);
   }
 
   valLine = (set: Set<any>, row: any): boolean => {
@@ -112,8 +107,8 @@ export class PackageComponent implements OnInit {
     this.sGlobal.addLine(set, row);
   }
 
-  selectAll = (arr: any, filters: any, set: Set<any>, size: number) => {
-    const newArr = this.filterTable(arr, filters, size)
+  selectAll = (arr: any, filters: any, set: Set<any>) => {
+    const newArr = this.filterTable(arr, filters)
     this.sGlobal.selectAll(newArr, set);
   }
 

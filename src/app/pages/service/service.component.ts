@@ -24,7 +24,6 @@ export class ServiceComponent implements OnInit {
 
   selectedService: Set<service> = new Set();
 
-  totalItems: number = 0;
   pageNumber: number = 1;
   pageSize: number = 8;
 
@@ -41,9 +40,7 @@ export class ServiceComponent implements OnInit {
   }
 
   filterTable = (): service[] => {
-    const result: { newArr: any[], lengthArr: number } = this.sGlobal.filterTable(this.service, this.filters);
-    this.totalItems = result.lengthArr;
-    return result.newArr;
+    return this.sGlobal.filterTable(this.service, this.filters);
   }
 
   valLine = (set: Set<any>, row: any) => {

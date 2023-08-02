@@ -16,10 +16,7 @@ export class GlobalService {
         return item[key].toString().toLowerCase().includes(filters[key].toString().toLowerCase());
       });
     });
-
-    const lengthArr = newArr.length;
-
-    return { newArr, lengthArr };
+    return newArr;
   }
 
   addLine = (set: Set<any>, row: any) => {

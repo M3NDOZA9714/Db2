@@ -26,7 +26,6 @@ export class TechnicianComponent implements OnInit {
   telefono: string = "";
   direccion: string = "";
 
-  totalItems: number = 0;
   pageNumber: number = 1;
   pageSize: number = 8;
 
@@ -79,13 +78,12 @@ export class TechnicianComponent implements OnInit {
   }
 
   selectAll = () => {
-    this.sGlobal.selectAll(this.technician, this.selectedTechnician);
+    const newArr = this.filterTable();
+    this.sGlobal.selectAll(newArr, this.selectedTechnician);
   }
 
   filterTable = (): technician[] => {
-    const result: { newArr: any[], lengthArr: number } = this.sGlobal.filterTable(this.technician, this.filters);
-    this.totalItems = result.lengthArr;
-    return result.newArr;
+    return this.sGlobal.filterTable(this.technician, this.filters);
   }
 
   pageChanged = (e: any) => {
