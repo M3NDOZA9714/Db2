@@ -45,6 +45,7 @@
                                 <th>Identidad</th>
                                 <th>Telefono</th>
                                 <th>Correo</th>
+                                <th></th>
                             </tr>
                             <tr>
                                 <th>
@@ -73,6 +74,10 @@
                                     <td>{{row.Identidad}}</td>
                                     <td>{{row.Telefono}}</td>
                                     <td>{{row.Correo}}</td>
+                                    <td><button (click)="loadPayTecnico(row)" data-bs-toggle='modal'
+                                            data-bs-target='#payBanco' class="btn btn-default btn-sm">
+                                            <i class="fas fa-piggy-bank"></i>
+                                        </button></td>
                                 </tr>
                             </ng-container>
                             <ng-container *ngIf="!technician.length">
@@ -137,6 +142,43 @@
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                 <button (click)="id != 0 ? updateTecnico() : insertTecnico()" type="button"
                     class="btn btn-secondary">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="payBanco" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Realizar pago</h5>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="">Banco</label>
+                            <ng-select [(ngModel)]="idBanco" class="custom" placeholder="Seleccione el Banco">
+                                <ng-option *ngFor="let row of bank" [value]="row.Id">
+                                    {{row.Nombre}} -- {{row.Cuenta}}
+                                </ng-option>
+                            </ng-select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="">Cantidad pagada</label>
+                            <input [(ngModel)]="monto" type="number" class="form-control form-control-sm">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+                <button [disabled]="(idBanco && idBanco == 0) || (monto && monto == 0)" (click)="payTecnico()" type="button"
+                    class="btn btn-default">Pagar</button>
             </div>
         </div>
     </div>

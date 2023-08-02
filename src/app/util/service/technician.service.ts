@@ -22,4 +22,8 @@ export class TechnicianService {
   updateTecnico = (id: number, nombre: string, identidad: string, correo: string, telefono: string, direccion: string) => {
     return this.http.post<response[]>(`${environment.baseUrlApi}technician/updateTecnico`, { id, nombre, identidad, correo, telefono, direccion });
   }
+
+  payTecnico = (idBando: number | null, idTecnico: number, monto: number | null) => {
+    return this.http.post<response[]>(`${environment.baseUrlApi}technician/payTecnico`, { idBando, idTecnico, monto });
+  }
 }

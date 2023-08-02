@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
+import { bank } from 'src/app/util/interface/bank.interface';
 import { technician, technicianFilter } from 'src/app/util/interface/technician.interface';
+import { BankService } from 'src/app/util/service/bank.service';
 import { GlobalService } from 'src/app/util/service/global.service';
 import { TechnicianService } from 'src/app/util/service/technician.service';
 
@@ -12,6 +14,7 @@ import { TechnicianService } from 'src/app/util/service/technician.service';
 export class TechnicianComponent implements OnInit {
 
   technician: technician[] = [];
+  bank: bank[] = [];
 
   selectedTechnician: Set<technician> = new Set();
 
@@ -20,24 +23,33 @@ export class TechnicianComponent implements OnInit {
   }
 
   id: number = 0;
+  idBanco!: number | null;
   nombre: string = "";
   identidad: string = "";
   correo: string = "";
   telefono: string = "";
   direccion: string = "";
+  monto!: number | null;
 
   pageNumber: number = 1;
   pageSize: number = 8;
 
-  constructor(private sTechnician: TechnicianService, private sGlobal: GlobalService, private toastr: ToastrService) { }
+  constructor(private sTechnician: TechnicianService, private sBank: BankService, private sGlobal: GlobalService, private toastr: ToastrService) { }
 
   ngOnInit(): void {
     this.getTecnico();
+    this.getBanco();
   }
 
   getTecnico = () => {
     this.sTechnician.getTecnico().subscribe(rs => {
       this.technician = rs;
+    })
+  }
+
+  getBanco = () => {
+    this.sBank.getBanco().subscribe(rs => {
+      this.bank = rs;
     })
   }
 
@@ -97,6 +109,20 @@ export class TechnicianComponent implements OnInit {
     this.correo = correo;
     this.telefono = telefono;
     this.direccion = direccion;
+  }
+
+  loadPayTecnico = (row: any) => {
+    this.id = row.Id;
+  }
+
+  payTecnico = () => {
+    this.sTechnician.payTecnico(this.idBanco, this.id, this.monto).subscribe(rs => {
+      if (rs[0].statusCode == 200) {
+        this.toastr.success(rs[0].message);
+      } else {
+        this.toastr.warning(rs[0].message);
+      }
+    })
   }
 
 }
