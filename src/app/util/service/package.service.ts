@@ -27,4 +27,8 @@ export class PackageService {
   updatePaquete = (id: number, nombre: string, descripcion: string, precio: number | null, servicio: servicio[]) => {
     return this.http.post<response[]>(`${environment.baseUrlApi}package/updatePaquete`, { id, nombre, descripcion, precio, servicio });
   }
+
+  deletePaquete = (id: number) => {
+    return this.http.post<response[]>(`${environment.baseUrlApi}package/deletePaquete`, { id });
+  }
 }

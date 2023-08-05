@@ -23,4 +23,8 @@ export class SuscriptionService {
   updateSuscripcion = (id: number | null, idPaquete: number | null, idCliente: number | null, idTecnico: number | null, horas: number) => {
     return this.http.post<response[]>(`${environment.baseUrlApi}suscription/updateSuscripcion`, { id, idPaquete, idCliente, idTecnico, horas });
   }
+
+  deleteSuscripcion = (id: number | null) => {
+    return this.http.post<response[]>(`${environment.baseUrlApi}suscription/deleteSuscripcion`, { id });
+  }
 }

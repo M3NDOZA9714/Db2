@@ -119,6 +119,19 @@ export class SuscriptionComponent implements OnInit {
     })
   }
 
+  deleteSuscripcion = () => {
+    const arr = Array.from(this.selectedSuscription)
+    this.sSuscription.deleteSuscripcion(arr[0].Id).subscribe(rs => {
+      if (rs[0].statusCode == 200) {
+        this.toastr.success(rs[0].message);
+        this.selectedSuscription.clear();
+        this.getSuscription();
+      } else {
+        this.toastr.warning(rs[0].message);
+      }
+    })
+  }
+
   addLine = (row: any) => {
     this.sGlobal.addLine(this.selectedSuscription, row);
   }

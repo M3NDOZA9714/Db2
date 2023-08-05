@@ -22,4 +22,8 @@ export class ServiceService {
   updateServicio = (id: number, nombre: string, descripcion: string, precio: number | null) => {
     return this.http.post<response[]>(`${environment.baseUrlApi}service/updateServicio`, { id, nombre, descripcion, precio });
   }
+
+  deleteServicio = (id: number) => {
+    return this.http.post<response[]>(`${environment.baseUrlApi}service/deleteServicio`, { id });
+  }
 }

@@ -62,7 +62,6 @@ export class PackageComponent implements OnInit {
 
   getPaquete = () => {
     this.sPackage.getPaquete().subscribe(rs => {
-      console.log(rs)
       this.paquete = rs;
     })
   }
@@ -169,6 +168,19 @@ export class PackageComponent implements OnInit {
 
   updatePaquete = () => {
     this.sPackage.updatePaquete(this.id, this.nombre, this.descripcion, this.precio, this.servicio).subscribe(rs => {
+      if (rs[0].statusCode == 200) {
+        this.toastr.success(rs[0].message);
+        this.getPaquete();
+        this.selectedPackage.clear();
+      } else {
+        this.toastr.warning(rs[0].message);
+      }
+    })
+  }
+
+  deletePaquete = () => {
+    const arr = Array.from(this.selectedPackage)
+    this.sPackage.deletePaquete(arr[0].Id).subscribe(rs => {
       if (rs[0].statusCode == 200) {
         this.toastr.success(rs[0].message);
         this.getPaquete();

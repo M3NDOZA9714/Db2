@@ -95,6 +95,19 @@ export class ClientComponent implements OnInit {
     })
   }
 
+  deleteCliente = () => {
+    const arr = Array.from(this.selectedClient)
+    this.sClient.deleteCliente(arr[0].Id).subscribe(rs => {
+      if (rs[0].statusCode == 200) {
+        this.toastr.success(rs[0].message);
+        this.getCliente();
+        this.selectedClient.clear();
+      } else {
+        this.toastr.warning(rs[0].message);
+      }
+    })
+  }
+
   loadCliente = () => {
     const { Id, Nombre, Direccion, Telefono, RTN } = Array.from(this.selectedClient.values())[0];
     this.setParams(Id, Nombre, Direccion, Telefono, RTN);

@@ -23,4 +23,8 @@ export class ClientService {
     return this.http.post<response[]>(`${environment.baseUrlApi}client/updateCliente`, { id, nombre, direccion, telefono, rtn });
   }
 
+  deleteCliente = (id: number) => {
+    return this.http.post<response[]>(`${environment.baseUrlApi}client/deleteCliente`, { id });
+  }
+
 }

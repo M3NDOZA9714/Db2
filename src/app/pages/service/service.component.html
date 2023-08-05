@@ -22,7 +22,8 @@
                         type="button" class="btn btn-default">
                         <i class="fas fa-plus"></i>
                     </button>
-                    <button type="button" class="btn btn-default">
+                    <button [disabled]="selectedService.size != 1" (click)="deleteServicio()" type="button"
+                        class="btn btn-default">
                         <i class="fas fa-times"></i>
                     </button>
                     <button [disabled]="selectedService.size != 1" (click)="loadServicio()"

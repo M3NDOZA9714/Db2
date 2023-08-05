@@ -76,6 +76,19 @@ export class TechnicianComponent implements OnInit {
     })
   }
 
+  deleteTecnico = () => {
+    const arr = Array.from(this.selectedTechnician)
+    this.sTechnician.deleteTecnico(arr[0].Id).subscribe(rs => {
+      if (rs[0].statusCode == 200) {
+        this.toastr.success(rs[0].message);
+        this.selectedTechnician.clear();
+        this.getTecnico();
+      } else {
+        this.toastr.warning(rs[0].message);
+      }
+    })
+  }
+
   loadTecnico = () => {
     const { Id, Nombre, Identidad, Correo, Telefono, Direccion } = Array.from(this.selectedTechnician.values())[0];
     this.setParams(Id, Nombre, Identidad, Correo, Telefono, Direccion);

@@ -22,7 +22,8 @@
                         type="button" class="btn btn-default">
                         <i class="fas fa-plus"></i>
                     </button>
-                    <button type="button" class="btn btn-default">
+                    <button [disabled]="selectedInvoice.size != 1" (click)="deleteFactura()" type="button"
+                        class="btn btn-default">
                         <i class="fas fa-times"></i>
                     </button>
                     <button [disabled]="selectedInvoice.size != 1" (click)="loadInvoice()"
@@ -259,8 +260,7 @@
                         <button (click)="addItemToInvoice()" class="btn btn-default">
                             <i class="fas fa-plus"></i>
                         </button>
-                        <button
-                            (click)="selectAll(servicioFactura, servicioFacturaFilters, selectedServicioFactura)"
+                        <button (click)="selectAll(servicioFactura, servicioFacturaFilters, selectedServicioFactura)"
                             type="button" class="btn btn-default">
                             <i class="fas fa-check-double"></i>
                         </button>

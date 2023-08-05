@@ -23,6 +23,10 @@ export class TechnicianService {
     return this.http.post<response[]>(`${environment.baseUrlApi}technician/updateTecnico`, { id, nombre, identidad, correo, telefono, direccion });
   }
 
+  deleteTecnico = (id: number) => {
+    return this.http.post<response[]>(`${environment.baseUrlApi}technician/deleteTecnico`, { id });
+  }
+
   payTecnico = (idBando: number | null, idTecnico: number, monto: number | null) => {
     return this.http.post<response[]>(`${environment.baseUrlApi}technician/payTecnico`, { idBando, idTecnico, monto });
   }

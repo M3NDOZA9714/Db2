@@ -22,4 +22,8 @@ export class BankService {
   updateBanco = (id: number, nombre: string, cuenta: string) => {
     return this.http.post<response[]>(`${environment.baseUrlApi}bank/updateBanco`, { id, nombre, cuenta });
   }
+
+  deleteBanco = (id: number) => {
+    return this.http.post<response[]>(`${environment.baseUrlApi}bank/deleteBanco`, { id });
+  }
 }

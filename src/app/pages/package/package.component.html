@@ -22,7 +22,8 @@
                         type="button" class="btn btn-default">
                         <i class="fas fa-plus"></i>
                     </button>
-                    <button type="button" class="btn btn-default">
+                    <button [disabled]="selectedPackage.size != 1" (click)="deletePaquete()" type="button"
+                        class="btn btn-default">
                         <i class="fas fa-times"></i>
                     </button>
                     <button [disabled]="selectedPackage.size != 1" (click)="loadPaquete()"
@@ -127,8 +128,8 @@
                                 <i class="fas fa-times"></i>
                             </button>
                             <button [disabled]="!servicio.length"
-                                (click)="selectAll(servicio, serviceFilters, selectedService)"
-                                type="button" class="btn btn-default">
+                                (click)="selectAll(servicio, serviceFilters, selectedService)" type="button"
+                                class="btn btn-default">
                                 <i class="fas fa-check-double"></i>
                             </button>
                         </div>
@@ -193,8 +194,8 @@
                             <i class="fas fa-plus"></i>
                         </button>
                         <button [disabled]="servicios.length== 0"
-                            (click)="selectAll(servicios, servicesFilters, selectedServices)"
-                            type="button" class="btn btn-default">
+                            (click)="selectAll(servicios, servicesFilters, selectedServices)" type="button"
+                            class="btn btn-default">
                             <i class="fas fa-check-double"></i>
                         </button>
                     </div>
@@ -205,6 +206,7 @@
                                     <tr>
                                         <th>Servicio</th>
                                         <th>Descripción</th>
+                                        <th>Precio</th>
                                     </tr>
                                     <tr>
                                         <th><input [(ngModel)]="servicesFilters.Nombre" type="text"

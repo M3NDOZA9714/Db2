@@ -156,6 +156,20 @@ export class InvoiceComponent implements OnInit {
     })
   }
 
+  deleteFactura = () => {
+    const arr = Array.from(this.selectedInvoice)
+    this.sInvoice.deleteFactura(arr[0].Id).subscribe(rs => {
+      if (rs[0].statusCode == 200) {
+        this.toastr.success(rs[0].message);
+        this.selectedInvoice.clear();
+        this.getFactura();
+        this.selectedEditingRow.clear();
+      } else {
+        this.toastr.warning(rs[0].message);
+      }
+    })
+  }
+
   loadPayFactura = (row: any) => {
     this.id = row.Id;
   }
@@ -164,6 +178,7 @@ export class InvoiceComponent implements OnInit {
     this.sInvoice.payFactura(this.idBanco, this.monto, this.id).subscribe(rs => {
       if (rs[0].statusCode == 200) {
         this.toastr.success(rs[0].message);
+        this.selectedInvoice.clear();
         this.getFactura();
       } else {
         this.toastr.warning(rs[0].message);

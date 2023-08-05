@@ -94,6 +94,19 @@ export class ServiceComponent implements OnInit {
     })
   }
 
+  deleteServicio = () => {
+    const arr = Array.from(this.selectedService)
+    this.sService.deleteServicio(arr[0].Id).subscribe(rs => {
+      if (rs[0].statusCode == 200) {
+        this.toastr.success(rs[0].message);
+        this.getServicio();
+        this.selectedService.clear();
+      } else {
+        this.toastr.warning(rs[0].message);
+      }
+    })
+  }
+
   loadServicio = () => {
     const { Id, Nombre, Descripcion, Precio } = Array.from(this.selectedService.values())[0];
     this.setParams(Id, Nombre, Descripcion, Precio);

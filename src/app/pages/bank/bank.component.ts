@@ -66,6 +66,19 @@ export class BankComponent implements OnInit {
     })
   }
 
+  deleteBanco = () => {
+    const arr = Array.from(this.selectedBank)
+    this.sBank.deleteBanco(arr[0].Id).subscribe(rs => {
+      if (rs[0].statusCode == 200) {
+        this.toastr.success(rs[0].message);
+        this.selectedBank.clear();
+        this.getBanco();
+      } else {
+        this.toastr.warning(rs[0].message);
+      }
+    })
+  }
+
   setParams = (id: number, nombre: string, cuenta: string) => {
     this.id = id;
     this.nombre = nombre;

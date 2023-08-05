@@ -22,7 +22,8 @@
                         data-bs-target="#linesModal" type="button" class="btn btn-default">
                         <i class="fas fa-plus"></i>
                     </button>
-                    <button [disabled]="!selectedTechnician.size" type="button" class="btn btn-default">
+                    <button [disabled]="selectedTechnician.size != 1" (click)="deleteTecnico()" type="button"
+                        class="btn btn-default">
                         <i class="fas fa-times"></i>
                     </button>
                     <button [disabled]="selectedTechnician.size != 1" (click)="loadTecnico()"
@@ -177,8 +178,8 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
-                <button [disabled]="(idBanco && idBanco == 0) || (monto && monto == 0)" (click)="payTecnico()" type="button"
-                    class="btn btn-default">Pagar</button>
+                <button [disabled]="(idBanco && idBanco == 0) || (monto && monto == 0)" (click)="payTecnico()"
+                    type="button" class="btn btn-default">Pagar</button>
             </div>
         </div>
     </div>

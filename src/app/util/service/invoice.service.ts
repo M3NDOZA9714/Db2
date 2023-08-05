@@ -32,6 +32,10 @@ export class InvoiceService {
     return this.http.post<response[]>(`${environment.baseUrlApi}invoice/updateFactura`, { id, idCliente, tipo, detalleFactura })
   }
 
+  deleteFactura = (id: number) => {
+    return this.http.post<response[]>(`${environment.baseUrlApi}invoice/deleteFactura`, { id })
+  }
+
   payFactura = (idBanco: number | null, monto: number | null, idFactura: number) => {
     return this.http.post<response[]>(`${environment.baseUrlApi}invoice/payFactura`, { idBanco, monto, idFactura })
   }
