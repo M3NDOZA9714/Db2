@@ -9,6 +9,7 @@ import { SuscriptionComponent } from './pages/suscription/suscription.component'
 import { TechnicianComponent } from './pages/technician/technician.component';
 import { BankComponent } from './pages/bank/bank.component';
 import { InvoiceComponent } from './pages/invoice/invoice.component';
+import { PaymentComponent } from './pages/payment/payment.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'main', pathMatch: 'full' },
@@ -22,7 +23,8 @@ const routes: Routes = [
       { path: 'suscription', component: SuscriptionComponent },
       { path: 'technician', component: TechnicianComponent },
       { path: 'bank', component: BankComponent },
-      { path: 'invoice', component: InvoiceComponent }
+      { path: 'invoice', component: InvoiceComponent },
+      { path: 'payment', component: PaymentComponent }
     ]
   },
   { path: '**', redirectTo: 'main' }

@@ -16,6 +16,7 @@ import { TechnicianComponent } from './technician/technician.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { BankComponent } from './bank/bank.component';
 import { InvoiceComponent } from './invoice/invoice.component';
+import { PaymentComponent } from './payment/payment.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { InvoiceComponent } from './invoice/invoice.component';
     SuscriptionComponent,
     TechnicianComponent,
     BankComponent,
-    InvoiceComponent
+    InvoiceComponent,
+    PaymentComponent
   ],
   imports: [
     CommonModule,

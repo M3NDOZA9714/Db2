@@ -18,7 +18,7 @@ export class ClientComponent implements OnInit {
   }
 
   id: number = 0;
-  nombre: string = "";
+  nombre: string = "Danilo";
   direccion: string = "";
   telefono: string = "";
   rtn: string = "";
