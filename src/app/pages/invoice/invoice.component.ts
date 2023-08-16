@@ -28,7 +28,7 @@ export class InvoiceComponent implements OnInit {
   monto!: number | null;
 
   invoiceFilters: invoiceFilters = {
-    Fecha: "", NombreCliente: "", Estado: "", Tipo: "", Subtotal: "", Impuesto: "", Total: ""
+    Fecha: "", Factura: "", NombreCliente: "", Estado: "", Tipo: "", Subtotal: "", Impuesto: "", Total: ""
   }
 
   invoiceDetailDilter: invoiceDetailFilters = {
@@ -97,7 +97,7 @@ export class InvoiceComponent implements OnInit {
 
   loadInvoice = () => {
     const { Id, IdCliente, Tipo } = Array.from(this.selectedInvoice.values())[0];
-    this.getFacturaDetalle(this.id);
+    this.getFacturaDetalle(Id);
     this.setParams(Id, IdCliente, Tipo, this.invoiceDetail);
   }
 

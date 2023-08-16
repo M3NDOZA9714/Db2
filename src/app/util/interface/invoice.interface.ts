@@ -1,6 +1,7 @@
 export interface invoice {
     Id: number,
     Fecha: string,
+    Factura: string,
     IdCliente: number,
     NombreCliente: string,
     Estado: string,
@@ -12,6 +13,7 @@ export interface invoice {
 
 export interface invoiceFilters {
     Fecha: string,
+    Factura: string,
     NombreCliente: string,
     Estado: string,
     Tipo: string,

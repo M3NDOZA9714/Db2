@@ -44,6 +44,7 @@
                         <thead>
                             <tr>
                                 <th>Fecha</th>
+                                <th>Factura</th>
                                 <th>Cliente</th>
                                 <th>Estado</th>
                                 <th>Tipo</th>
@@ -56,6 +57,10 @@
                                 <th>
                                     <input [(ngModel)]="invoiceFilters.Fecha" class="form-control form-control-sm"
                                         type="text">
+                                </th>
+                                <th>
+                                    <input [(ngModel)]="invoiceFilters.Factura"
+                                        class="form-control form-control-sm" type="text">
                                 </th>
                                 <th>
                                     <input [(ngModel)]="invoiceFilters.NombreCliente"
@@ -91,6 +96,7 @@
                                     [ngClass]="{'table-primary': valLine(selectedInvoice, row)}"
                                     (click)="addLine(selectedInvoice, row)">
                                     <td>{{row.Fecha}}</td>
+                                    <td>{{row.Factura}}</td>
                                     <td>{{row.NombreCliente}}</td>
                                     <td>{{row.Estado}}</td>
                                     <td>{{row.Tipo}}</td>
